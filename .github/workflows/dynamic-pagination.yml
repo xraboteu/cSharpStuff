@@ -1,0 +1,27 @@
+name: Dynamic pagination example
+on:
+  push:
+    paths:
+      - 'examples/DynamicPagination/**'
+      - '.github/workflows/dynamic-pagination.yml'
+  pull_request:
+    paths:
+      - 'examples/DynamicPagination/**'
+      - '.github/workflows/dynamic-pagination.yml'
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build
+        run: dotnet build examples/DynamicPagination/DynamicPagination.csproj --configuration Release
+      - name: Smoke test ordering and pagination
+        shell: bash
+        run: |
+          output="$(dotnet run --no-build --configuration Release --project examples/DynamicPagination/DynamicPagination.csproj)"
+          printf '%s\n' "$output"
+          expected=$'Id=3, Date=2026-10-13, Price=10\nId=2, Date=2026-10-13, Price=30'
+          test "$output" = "$expected"
