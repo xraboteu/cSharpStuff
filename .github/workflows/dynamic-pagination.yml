@@ -23,5 +23,7 @@ jobs:
         run: |
           output="$(dotnet run --no-build --configuration Release --project examples/DynamicPagination/DynamicPagination.csproj)"
           printf '%s\n' "$output"
-          expected=$'Id=3, Date=2026-10-13, Price=10\nId=2, Date=2026-10-13, Price=30'
+          expected=, Date=2026-10-13, Price=10\nId=2, Date=2026-10-13, Price=30'
+          test "$output" = "$expected"
+TotalCount=4, TotalPages=2\nId=3, Date=2026-10-13, Price=10\nId=2, Date=2026-10-13, Price=30'
           test "$output" = "$expected"

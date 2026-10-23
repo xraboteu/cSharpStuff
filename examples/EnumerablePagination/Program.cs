@@ -32,10 +32,10 @@ if (!sorts.Any(s => s.Field.Equals(nameof(Product.Id), StringComparison.OrdinalI
 
 var page = products
     .ApplySort(sorts, allowedFields)
-    .ApplyPagination(request.Page, request.PageSize)
-    .ToList();
+    .ToPagedResult(request.Page, request.PageSize);
 
-foreach (var product in page)
+Console.WriteLine($"TotalCount={page.TotalCount}, TotalPages={page.TotalPages}");
+foreach (var product in page.Items)
     Console.WriteLine($"Id={product.Id}, Date={product.Date:yyyy-MM-dd}, Price={product.Price}");
 
 public sealed record Product(int Id, DateTime Date, decimal Price);

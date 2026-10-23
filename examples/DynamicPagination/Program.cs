@@ -33,10 +33,10 @@ if (!sorts.Any(s => s.Field.Equals(nameof(Product.Id), StringComparison.OrdinalI
 
 var result = products.AsQueryable()
     .ApplySort(sorts, allowed)
-    .ApplyPagination(request.Page, request.PageSize)
-    .ToList();
+    .ToPagedResult(request.Page, request.PageSize);
 
-foreach (var product in result)
+Console.WriteLine($"TotalCount={result.TotalCount}, TotalPages={result.TotalPages}");
+foreach (var product in result.Items)
     Console.WriteLine($"Id={product.Id}, Date={product.Date:yyyy-MM-dd}, Price={product.Price}");
 
 // Same extension works with EF Core IQueryable, where expressions translate to SQL.
